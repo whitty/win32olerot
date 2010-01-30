@@ -68,7 +68,7 @@ private:
 
 /* Pseudo consts */
 static VALUE cWIN32OLE;
-static VALUE eWIN32OLE_RUNTIME_ERROR;
+static VALUE eWIN32OLE_RUNTIME_ERROR; // TODO - define own exceptions
 static VALUE cWIN32OLE_ROT;
 
 class WIN32OLE_RunningObjectTable
