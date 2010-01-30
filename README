@@ -1,0 +1,29 @@
+Synopsis
+--------
+
+So far only built using VS.NET 2005 - your mileage may vary
+
+> ruby extconf.rb
+> nmake
+> ruby tests/tc_*.rb    # TODO - tests don't do anything
+> nmake install
+
+Example
+-------
+
+require 'win32ole_rot'
+
+rot = WIN32OLE::RunningObjectTable.new
+
+my_doc_path = 'path/to/my.doc'
+
+if rot.is_running?(my_doc_path) then
+  # document is open, connect to running MS-Word instance
+  my_doc = WIN32OLE.connect('my_doc_path')
+end
+
+...
+
+open_documents = rot.select {|x| x =~ /.doc$/}
+print "These documents are open:\n  "
+puts open_documents.join("\n  ")
