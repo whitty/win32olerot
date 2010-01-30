@@ -26,7 +26,7 @@ manifest-stamp: $(DLLIB)
 end
 
 
-def create_win32ole_makefile
+def create_win32ole_rot_makefile
   if have_library("ole32") and
      have_library("oleaut32") and
      have_library("uuid") and 
@@ -48,4 +48,4 @@ end
 
 $cleanfiles << "manifest-stamp $(DLLIB).manifest $(DEFFILE)" if CONFIG["target_os"] ==  "mswin32"
 
-create_win32ole_rot
+create_win32ole_rot_makefile
