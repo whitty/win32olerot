@@ -1,22 +1,8 @@
-#----------------------------------
-# extconf.rb
-# - Based on:
-# $Revision: 1.5.2.2 $
-# $Date: 2005/10/09 02:15:03 $
-#----------------------------------
+# Lovingly ripped off from win32ole extconf.rb
+
 require 'mkmf'
 
 dir_config("win32")
-
-SRCFILES=<<SRC
-win32ole_moniker.c
-SRC
-
-def create_docfile(src)
-  open(File.expand_path($srcdir) + "/.document", "w") {|ofs|
-    ofs.print src
-  }
-end
 
 def append_manifest(extension_name)
   case CONFIG["target_os"] 
@@ -48,21 +34,18 @@ def create_win32ole_makefile
      have_library("kernel32") and
      have_library("advapi32") and
      have_header("windows.h")
-    create_makefile("win32ole_moniker")
-    create_docfile(SRCFILES)
-    append_manifest("win32ole_moniker")
+    create_makefile("win32ole_rot")
+    append_manifest("win32ole_rot")
   else
-    create_docfile("")
+    ## TODO
   end
 end
 
 case RUBY_PLATFORM
 when /mswin32/
   $CFLAGS += ' /W3'
-when /cygwin/, /mingw/
-  $defs << '-DNONAMELESSUNION'
 end
 
 $cleanfiles << "manifest-stamp $(DLLIB).manifest $(DEFFILE)" if CONFIG["target_os"] ==  "mswin32"
 
-create_win32ole_makefile
+create_win32ole_rot
