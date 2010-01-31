@@ -233,7 +233,7 @@ static VALUE rot_each(VALUE rot)
 }
 
 void
-Init_win32ole_moniker()
+Init_win32ole_rot()
 {
     (void)rb_require("win32ole");
 
