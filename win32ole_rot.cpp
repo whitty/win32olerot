@@ -147,7 +147,7 @@ public:
         return result;
     }
 
-    VALUE each()
+    VALUE eachDisplayName()
     {
         CComPtr<IEnumMoniker> pEnumMoniker;
         HRESULTDecode hr = pRunningObjectTable->EnumRunning(&pEnumMoniker);
@@ -183,10 +183,20 @@ public:
                 {
                     char* pDisplayName = ALLOC_N(char, size);
                     ::WideCharToMultiByte(CP_ACP, 0, pDisplayNameWide, -1, pDisplayName, size, NULL, NULL);
-                    result = rb_yield(rb_str_new2(pDisplayName));
+
+                    // Only provide monikers that can be looked up by
+                    // display-name
+                    CComPtr<IMoniker> pMonikerLookup;
+                    ULONG ignored = 0;
+                    hr = MkParseDisplayName(pBindCtx, pDisplayNameWide, &ignored, &pMonikerLookup);
+
+                    if(SUCCEEDED(hr))
+                    {
+                        result = rb_yield(rb_str_new2(pDisplayName));
+                    }
                     xfree(pDisplayName);
                 }
-    
+
                 ::CoTaskMemFree(pDisplayNameWide);
             }
             hr = pEnumMoniker->Next(1, &pMoniker, 0);
@@ -225,11 +235,11 @@ static VALUE rot_isRunning(VALUE rot, VALUE v)
     return pRot->isRunning(v);
 }
 
-static VALUE rot_each(VALUE rot)
+static VALUE rot_each_display_name(VALUE rot)
 {
     WIN32OLE_RunningObjectTable* pRot;
     Data_Get_Struct(rot, WIN32OLE_RunningObjectTable, pRot);
-    return pRot->each();
+    return pRot->eachDisplayName();
 }
 
 void
@@ -249,5 +259,6 @@ Init_win32ole_rot()
     cWIN32OLE_ROT = rb_define_class_under(cWIN32OLE, "RunningObjectTable", rb_cObject);
     rb_define_alloc_func(cWIN32OLE_ROT, rot_allocate);
     rb_define_method(cWIN32OLE_ROT, "is_running?", RUBY_METHOD_FUNC(rot_isRunning), 1);
-    rb_define_method(cWIN32OLE_ROT, "each", RUBY_METHOD_FUNC(rot_each), 0);
+    rb_define_method(cWIN32OLE_ROT, "each_display_name", RUBY_METHOD_FUNC(rot_each_display_name), 0);
+    rb_define_alias(cWIN32OLE_ROT, "each", "each_display_name");
 }

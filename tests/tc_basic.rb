@@ -13,15 +13,15 @@ class TC_Create < Test::Unit::TestCase
   end
 
   def test_each
-    # not really a test
-    @rot.each {|x| p x}
+    # not really a test since we don't know what could be running
+    @rot.each do |x| 
+      assert_nothing_thrown { WIN32OLE.connect(x) }
+    end
   end
 
   def test_is_running
     @rot.each do |x|
-      if x !~ /^!/ then
-        assert @rot.is_running?(x)
-      end
+      assert @rot.is_running?(x)
     end
   end
   
