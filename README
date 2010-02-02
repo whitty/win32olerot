@@ -11,7 +11,7 @@ So far only built using VS.NET 2005 - your mileage may vary
 Example
 -------
 
-require 'win32ole_rot'
+require 'win32olerot'
 
 rot = WIN32OLE::RunningObjectTable.new
 

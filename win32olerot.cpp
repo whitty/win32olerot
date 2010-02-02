@@ -243,7 +243,7 @@ static VALUE rot_each_display_name(VALUE rot)
 }
 
 void
-Init_win32ole_rot()
+Init_win32olerot()
 {
     (void)rb_require("win32ole");
 

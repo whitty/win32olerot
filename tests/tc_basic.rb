@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 require 'test/unit'
-require 'win32ole_rot'
+require 'win32olerot'
 
 class TC_Create < Test::Unit::TestCase
 

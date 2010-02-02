@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name = %q{win32ole_rot}
+  s.name = %q{win32olerot}
   s.version = "0.0.1"
   s.date = %q{2010-02-02}
   s.authors = ["G Whiteley"]
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.files = [
     "README",
     "LICENSE.txt",
-    "win32ole_rot.cpp"
+    "win32olerot.cpp"
   ]
 
 
