@@ -1,1 +1,9 @@
 *~
+*.obj
+*.pdb
+*.so
+*.so.manifest
+*-i386-mswin32.*
+mkmf.log
+manifest-stamp
+Makefile
