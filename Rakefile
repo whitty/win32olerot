@@ -21,7 +21,7 @@ spec = Gem::Specification.new do |s|
   s.date = %q{2010-02-02}
   s.authors = ["G Whiteley"]
   # TODO - fix email address
-#  s.email = %q{whitty@rubyforge.org}
+  # s.email = %q{whitty@rubyforge.org}
   s.rubyforge_project = 'win32olerot'
   s.summary = %q{win32olerot provides access to the win32 RunningObjectTable (ROT).}
   s.homepage = %q{http://win32olerot.rubyforge.org/}
