@@ -1,9 +1,18 @@
 require 'rubygems'
 require 'rake/extensiontask'
 require 'rake/gempackagetask'
+require 'rake/testtask'
 
-# TODO - remove the old gem-spec
+EXTCONF_FILES = FileList['ext/**/extconf.rb']
 EXTENSION_SOURCE = FileList['ext/**/*.c', 'ext/**/*.cpp', 'ext/**/*.h']
+TEST_FILES = FileList['tests/tc_*.rb']
+
+task :default => [:test]
+
+Rake::TestTask.new :test => [:compile] do |t|
+  t.test_files = TEST_FILES
+  t.warning = true
+end
 
 # compilation gemspec
 spec = Gem::Specification.new do |s|
@@ -18,7 +27,6 @@ spec = Gem::Specification.new do |s|
   s.homepage = %q{http://win32olerot.rubyforge.org/}
   s.description = %q{win32olerot provides an adjunct to the standard WIN32OLE Ruby library for access to the win32 RunningObjectTable (ROT). The RunningObjectTable contains the list of registered monikers that can be connected to using WIN32OLE.connect().}
 
-  s.add_dependency('win32ole')
   s.add_development_dependency('rake-compiler')
 
   # consider Changelog, docs etc,...
@@ -34,7 +42,8 @@ spec = Gem::Specification.new do |s|
                  # otherwise require cross-compilation or no binary compile
                  'mswin32'
                end
-  s.extensions = FileList['ext/**/extconf.rb']
+  s.extensions = EXTCONF_FILES
+  s.test_files = TEST_FILES
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
