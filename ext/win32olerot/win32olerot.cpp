@@ -109,7 +109,7 @@ public:
         }
     }
 
-    VALUE isRunning(VALUE aMoniker)
+    VALUE isRunning(VALUE aMoniker, VALUE aInvalidMonikersArentRunning)
     {
         VALUE result = Qfalse;
 
@@ -131,10 +131,14 @@ public:
         hr = MkParseDisplayName(pBindCtx, pBuf, &ignored, &pMoniker);
         ::SysFreeString(pBuf);
 
-        if(FAILED(hr)) {
+        if (FAILED(hr))
+        {
+            if (RTEST(aInvalidMonikersArentRunning))
+                return result;
+
             VALUE message = hr.message();
             rb_raise(eWIN32OLE_RUNTIME_ERROR,
-                      "Failed to parse display name of moniker '%s': %s",
+                     "Failed to parse display name of moniker '%s': %s",
                      StringValuePtr(aMoniker),
                      StringValuePtr(message));
         }
@@ -228,11 +232,30 @@ static VALUE rot_allocate(VALUE klass)
     return Data_Wrap_Struct(klass, rot_mark, rot_free, table);
 }
 
-static VALUE rot_isRunning(VALUE rot, VALUE v)
+static VALUE rot_isRunning(VALUE rot, VALUE vArray)
 {
+    VALUE moniker = rb_ary_shift(vArray);
+    if (NIL_P(moniker))
+    {
+        rb_raise(rb_eArgError, "Missing required parameter 'moniker_name'");
+    }
+
+    VALUE exceptionsDontError = Qtrue;
+
+    VALUE options = rb_ary_shift(vArray);
+    if (!NIL_P(options))
+    {
+        VALUE optValue = rb_funcall(options, rb_intern("fetch"),
+                                    2, ID2SYM(rb_intern("raise_exception")), Qnil);
+        if (RTEST(optValue))
+        {
+            exceptionsDontError = Qfalse;
+        }
+    }
+
     WIN32OLE_RunningObjectTable* pRot;
     Data_Get_Struct(rot, WIN32OLE_RunningObjectTable, pRot);
-    return pRot->isRunning(v);
+    return pRot->isRunning(moniker, exceptionsDontError);
 }
 
 static VALUE rot_each_display_name(VALUE rot)
@@ -258,7 +281,7 @@ Init_win32olerot()
 
     cWIN32OLE_ROT = rb_define_class_under(cWIN32OLE, "RunningObjectTable", rb_cObject);
     rb_define_alloc_func(cWIN32OLE_ROT, rot_allocate);
-    rb_define_method(cWIN32OLE_ROT, "is_running?", RUBY_METHOD_FUNC(rot_isRunning), 1);
+    rb_define_method(cWIN32OLE_ROT, "is_running?", RUBY_METHOD_FUNC(rot_isRunning), -2);
     rb_define_method(cWIN32OLE_ROT, "each_display_name", RUBY_METHOD_FUNC(rot_each_display_name), 0);
     rb_define_alias(cWIN32OLE_ROT, "each", "each_display_name");
 }

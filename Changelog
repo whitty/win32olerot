@@ -1,0 +1,10 @@
+2010-02-04  0.0.2
+	* win32olerot.cpp: is_running? returns false on unparseable
+	  moniker rather than raising exception
+
+	* win32olerot.cpp: add optional hash parameter with option:
+	  :raise_exception => true to reinstate former exception behaviour
+	  on unparseable moniker
+
+2010-02-03  0.0.1
+	* Initial release

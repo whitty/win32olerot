@@ -24,6 +24,18 @@ class TC_Create < Test::Unit::TestCase
       assert @rot.is_running?(x)
     end
   end
-  
+
+  def test_invalid_monikers_arent_running
+    assert_nothing_thrown do
+      assert !@rot.is_running?("blah_garbage_data_here")
+      assert !@rot.is_running?("blah_garbage_data_here", :raise_exception => false)
+    end
+  end
+
+  def test_invalid_monikers_exception_with_raise_exception_option
+    assert_raises(WIN32OLERuntimeError) { !@rot.is_running?("blah_garbage_data_here", :raise_exception => true) }
+  end
+
+
 end
 
