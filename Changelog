@@ -1,3 +1,9 @@
+2010-02-10  0.0.3
+	* win32olerot.cpp: apply _USE_RTM_VERSION to force SxS assembly
+	  version from retail vs.2005 to increase compatibility
+	  Further details
+	  http://tedwvc.wordpress.com/2009/08/10/avoiding-problems-with-vc2005-sp1-security-update-kb971090/
+
 2010-02-04  0.0.2
 	* win32olerot.cpp: is_running? returns false on unparseable
 	  moniker rather than raising exception

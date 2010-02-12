@@ -1,6 +1,9 @@
 /*
  */
 
+// Force retail VS2005 version linkage
+#define _USE_RTM_VERSION
+
 #include <atlbase.h>
 #include "ruby.h"
 #include <windows.h>
