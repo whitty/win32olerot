@@ -4,13 +4,31 @@
 // Force retail VS2005 version linkage
 #define _USE_RTM_VERSION
 
-#include <atlbase.h>
 #include "ruby.h"
 #include <windows.h>
 #include <ocidl.h>
 #include <olectl.h>
 #include <ole2.h>
 #include <stdarg.h>
+
+// Grrr CComPtr isn't in the Win32 Platform SDK
+// #include <atlbase.h>
+template<typename T>
+class GwCComPtr
+{
+public:
+    GwCComPtr() : mPtr(0) {}
+    GwCComPtr(T* aPtr) : mPtr(aPtr) {}
+    ~GwCComPtr() { if (mPtr) mPtr->Release(); }
+
+    operator T*() { return mPtr; }
+    T& operator *() { return mPtr; }
+    T** operator &() { return &mPtr; }
+    T* operator ->() { return mPtr; }
+private:
+    T* mPtr;
+};
+#define CComPtr GwCComPtr
 
 class HRESULTDecode
 {
@@ -268,7 +286,7 @@ static VALUE rot_each_display_name(VALUE rot)
     return pRot->eachDisplayName();
 }
 
-void
+extern "C" void
 Init_win32olerot()
 {
     (void)rb_require("win32ole");
