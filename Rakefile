@@ -17,11 +17,10 @@ end
 # compilation gemspec
 spec = Gem::Specification.new do |s|
   s.name = 'win32olerot'
-  s.version = "0.0.3"
-  s.date = %q{2010-02-02}
+  s.version = "0.0.4"
+  s.date = %q{2011-03-20}
   s.authors = ["G Whiteley"]
-  # TODO - fix email address
-  # s.email = %q{whitty@rubyforge.org}
+  s.email = %q{whitty@users.sourceforge.net}
   s.rubyforge_project = 'win32olerot'
   s.summary = %q{win32olerot provides access to the win32 RunningObjectTable (ROT).}
   s.homepage = %q{http://win32olerot.rubyforge.org/}
@@ -35,13 +34,8 @@ spec = Gem::Specification.new do |s|
     "LICENSE.txt",
   ].concat(EXTENSION_SOURCE)
 
-  s.platform = if RUBY_PLATFORM =~ /mswin32$/
-                 # allow native compiles through rake-compiler
-                 Gem::Platform::RUBY
-               else
-                 # otherwise require cross-compilation or no binary compile
-                 'mswin32'
-               end
+  s.platform = Gem::Platform::RUBY
+
   s.extensions = EXTCONF_FILES
   s.test_files = TEST_FILES
 end
@@ -50,4 +44,6 @@ Rake::GemPackageTask.new(spec) do |pkg|
 end
 
 Rake::ExtensionTask.new('win32olerot', spec) do |ext|
+  ext.cross_compile = true
+  ext.cross_platform = 'i386-mswin32'
 end
