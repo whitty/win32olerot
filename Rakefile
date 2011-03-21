@@ -17,8 +17,8 @@ end
 # compilation gemspec
 spec = Gem::Specification.new do |s|
   s.name = 'win32olerot'
-  s.version = "0.0.4"
-  s.date = %q{2011-03-20}
+  s.version = "0.0.5"
+  s.date = %q{2011-03-21}
   s.authors = ["G Whiteley"]
   s.email = %q{whitty@users.sourceforge.net}
   s.rubyforge_project = 'win32olerot'
@@ -45,5 +45,5 @@ end
 
 Rake::ExtensionTask.new('win32olerot', spec) do |ext|
   ext.cross_compile = true
-  ext.cross_platform = 'i386-mswin32'
+  ext.cross_platform = 'i386-mingw32'
 end
